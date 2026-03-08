@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 01 & 02: ICT Quiz</title>
+    <style>
+        :root {
+            --primary-color: #4CAF50; /* Green theme */
+            --secondary-color: #FFEB3B; /* Yellow accent */
+            --bg-color: #f0f8ff; /* Alice Blue */
+            --card-color: #ffffff;
+            --success-color: #2196F3;
+            --error-color: #F44336;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: var(--bg-color);
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 950px;
+            margin: 0 auto;
+            background-color: var(--card-color);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: var(--primary-color);
+            margin-bottom: 5px;
+            border-bottom: 3px solid var(--secondary-color);
+            padding-bottom: 10px;
+        }
+
+        /* --- Language Switch --- */
+        #language-switch {
+            text-align: right;
+            margin-bottom: 15px;
+        }
+        #language-switch button {
+            background-color: #607D8B; /* Blue Grey */
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-size: 0.9em;
+        }
+        
+        /* --- Input Fields --- */
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .input-group label, .input-group input {
+            display: inline-block;
+            margin-right: 15px;
+            font-weight: bold;
+        }
+        .input-group input[type="text"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 250px;
+        }
+        
+        /* --- Quiz Card Styles --- */
+        .quiz-card {
+            background-color: #e8f5e9; /* Light green */
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            text-align: left;
+            position: relative;
+        }
+        .quiz-card h3 {
+            color: #388E3C;
+            margin-top: 0;
+            border-bottom: 1px dashed #A5D6A7;
+            padding-bottom: 10px;
+        }
+
+        /* --- Quiz Types --- */
+        .options label {
+            display: block;
+            margin: 8px 0;
+            cursor: pointer;
+        }
+        .fill-in input[type="text"] {
+            padding: 5px;
+            border: 1px solid #aaa;
+            border-radius: 3px;
+            width: 80%;
+            margin-top: 5px;
+        }
+        .matching-pair {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 5px 0;
+            border-bottom: 1px dotted #ccc;
+        }
+        .matching-pair div {
+            flex: 1;
+            padding: 5px;
+        }
+        .matching-pair select {
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #aaa;
+            width: 90%;
+        }
+
+        /* --- Buttons & Feedback --- */
+        .actions {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px dashed var(--primary-color);
+        }
+        button {
+            padding: 12px 25px;
+            margin: 5px 10px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+        }
+        #check-btn { background-color: var(--primary-color); color: white; }
+        #reset-btn { background-color: var(--error-color); color: white; }
+        #print-save-btn { background-color: var(--success-color); color: white; }
+        button:hover { opacity: 0.8; transform: scale(1.03); }
+
+        #score-display {
+            margin-top: 20px;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: var(--primary-color);
+            padding: 10px;
+            border: 2px solid var(--primary-color);
+            border-radius: 10px;
+            display: none;
+        }
+        .correct-feedback { color: var(--success-color); font-weight: bold; }
+        .incorrect-feedback { color: var(--error-color); font-weight: bold; }
+
+        /* Floating Emojis */
+        .emoji-float {
+            position: fixed;
+            font-size: 30px;
+            animation: float 10s ease-in-out infinite;
+            pointer-events: none;
+            opacity: 0.7;
+            z-index: 1000;
+        }
+        .emoji-1 { top: 10%; left: 5%; animation-delay: 0s; }
+        .emoji-2 { top: 50%; right: 5%; animation-delay: 2s; }
+        .emoji-3 { bottom: 10%; left: 20%; animation-delay: 4s; }
+        .emoji-4 { top: 30%; right: 15%; animation-delay: 6s; }
+
+        @keyframes float {
+            0% { transform: translate(0, 0); }
+            50% { transform: translate(20px, 40px); }
+            100% { transform: translate(0, 0); }
+        }
+
+        /* Print Styles */
+        @media print {
+            body { background-color: white; }
+            .container { box-shadow: none; border: none; }
+            button, .actions, .emoji-float, #language-switch { display: none; }
+            .quiz-card { border: 1px solid #ccc; background: white; }
+            #score-display { display: block !important; border: none; color: black; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="emoji-float emoji-1">💻</div>
+<div class="emoji-float emoji-2">✅</div>
+<div class="emoji-float emoji-3">🧠</div>
+<div class="emoji-float emoji-4">📚</div>
+
+<div class="container">
+    <div id="language-switch">
+        <button onclick="toggleLanguage()">Switch Language: <span id="current-lang">English</span></button>
+    </div>
+
+    <h1 id="quiz-title-h1">Module 01:Let us Shutdown computer safely</h1>
+    <h2 id="quiz-title-h2">(Grade 6 - Information and Communication Technology)</h2>
+
+    <div class="input-group">
+        <label for="student-name" id="name-label">Student Name:</label>
+        <input type="text" id="student-name" placeholder="Enter your full name / ඔබගේ නම ඇතුලත් කරන්න">
+    </div>
+
+    <div id="teacher-instructions" class="quiz-card" style="text-align: center; background-color: #fff3e0; color: #e65100;">
+        <h3 id="inst-title">Teacher Instructions (Do Not Print)</h3>
+        <p id="inst-p1">This quiz is based on Module 01 (Computer Handling/Safety) and Module 02 (Word Processing).</p>
+        <p id="inst-p2">The Shutdown process is essential for protecting the Software and Hardware.</p>
+    </div>
+
+    <form id="ict-quiz">
+        <div id="quiz-questions">
+            </div>
+        
+        <div class="actions">
+            <button type="button" id="check-btn" onclick="checkAnswers()">Check Answers</button>
+            <button type="button" id="reset-btn" onclick="resetQuiz()">Reset Quiz</button>
+            <button type="button" id="print-save-btn" onclick="printQuiz()">Print/Save Option</button>
+        </div>
+
+        <div id="score-display"></div>
+    </form>
+</div>
+
+<script>
+    // --- Quiz Data and Answers (36 Questions) ---
+    const quizData = {
+        'en': {
+            'q1': { q: "Q1: Multiple Choice: What is the primary reason for following a correct 'Shut Down' procedure?", options: ['A. To save electricity.', 'B. To protect the software and hardware.', 'C. To make the computer cool down faster.', 'D. To clear the internet history.'], ans: 'B', type: 'mcq', points: 1 },
+            'q2': { q: "Q2: Multiple Choice: A computer differs from a TV because it requires a:", options: ['A. Specific procedure for turning off.', 'B. Special remote control.', 'C. Battery backup always.', 'D. Faster internet connection.'], ans: 'A', type: 'mcq', points: 1 },
+            'q3': { q: "Q3: Fill in the Blank: The correct shutdown procedure is important for protecting the ___________ and the Hardware of the computer.", ans: 'SOFTWARE', type: 'fill', points: 1 },
+            'q4': { q: "Q4: Fill in the Blank: In the Boot-up process, the power is finally supplied to the _______________ Unit.", ans: 'SYSTEM', type: 'fill', points: 1 },
+            'q5': { q: "Q5: Matching (Boot-up Order): Match the device with its approximate place in the correct boot-up sequence.", pairs: [['1. UPS (Wall Switch)', 'First Step'], ['2. System Unit', 'Last Step'], ['3. Monitor', 'Second Step']], ans: {'q5-match-1': 'A', 'q5-match-2': 'C', 'q5-match-3': 'B'}, type: 'match', points: 3 },
+            'q6': { q: "Q6: Matching (Component Type): Match the item with its correct category.", pairs: [['1. Monitor', 'Hardware'], ['2. Operating System', 'Software']], ans: {'q6-match-1': 'A', 'q6-match-2': 'B'}, type: 'match', points: 2 },
+            'q7': { q: "Q7: Multiple Choice: What is the first step in a safe shutdown process (before turning off the power switch)?", options: ['A. Closing all running applications and saving files.', 'B. Unplugging the wall socket.', 'C. Removing the keyboard.'], ans: 'A', type: 'mcq', points: 1 },
+            'q8': { q: "Q8: Fill in the Blank: Maintaining a correct ______________ is essential to prevent health problems (ergonomics).", ans: 'POSTURE', type: 'fill', points: 1 },
+            'q9': { q: "Q9: Multiple Choice: What is the 'System Unit' often referred to as?", options: ['A. The display.', 'B. The computer case or tower.', 'C. The mousepad.'], ans: 'B', type: 'mcq', points: 1 },
+            'q10': { q: "Q10: Fill in the Blank: The full form of UPS is Uninterruptible Power ________________.", ans: 'SUPPLY', type: 'fill', points: 1 },
+            'q11': { q: "Q11: Multiple Choice: Which device is a basic output component?", options: ['A. Keyboard.', 'B. Printer.', 'C. Mouse.'], ans: 'B', type: 'mcq', points: 1 },
+            'q12': { q: "Q12: Fill in the Blank: The process of switching on a computer is called _______________.", ans: 'BOOTING', type: 'fill', points: 1 },
+            'q13': { q: "Q13: Multiple Choice: Which of these is a basic input device?", options: ['A. Keyboard.', 'B. Monitor.', 'C. Speaker.'], ans: 'A', type: 'mcq', points: 1 },
+            'q14': { q: "Q14: Fill in the Blank: The device used to control the cursor on the screen is the ________________.", ans: 'MOUSE', type: 'fill', points: 1 },
+            'q15': { q: "Q15: Multiple Choice: If you switch off the computer directly (without shutdown), you risk losing unsaved data from:", options: ['A. Hard Disk Drive (HDD).', 'B. CD-ROM.', 'C. RAM (Memory).'], ans: 'C', type: 'mcq', points: 1 },
+            'q16': { q: "Q16: Matching (Component Function): Match the component with its primary function type.", pairs: [['1. Printer', 'Output'], ['2. Scanner', 'Input']], ans: {'q16-match-1': 'A', 'q16-match-2': 'B'}, type: 'match', points: 2 },
+            'q17': { q: "Q17: Fill in the Blank: The device that provides battery backup to the computer during a power outage is the ________________.", ans: 'UPS', type: 'fill', points: 1 },
+            'q18': { q: "Q18: Multiple Choice: Where should a computer monitor be placed to avoid screen glare?", options: ['A. Directly facing a bright window.', 'B. Away from direct window light.', 'C. In a completely dark room.'], ans: 'B', type: 'mcq', points: 1 },
+            'q19': { q: "Q19: Fill in the Blank: The software used for creating letters and reports is called Word ________________.", ans: 'PROCESSING', type: 'fill', points: 1 },
+            'q20': { q: "Q20: Multiple Choice: Which operation is typically *not* done in a Word Processing Software?", options: ['A. Inserting tables.', 'B. Changing font style.', 'C. Complex financial calculations.'], ans: 'C', type: 'mcq', points: 1 },
+            'q21': { q: "Q21: Fill in the Blank: To make text bold or italic, you use the Text ________________ features.", ans: 'FORMATTING', type: 'fill', points: 1 },
+            'q22': { q: "Q22: Multiple Choice: What is the process of making a physical copy of a document called?", options: ['A. Saving.', 'B. Scanning.', 'C. Printing.'], ans: 'C', type: 'mcq', points: 1 },
+            'q23': { q: "Q23: Fill in the Blank: Before closing the word processing software, it's vital to ________________ your work.", ans: 'SAVE', type: 'fill', points: 1 },
+            'q24': { q: "Q24: Multiple Choice: Which of these is an example of Hardware?", options: ['A. Speaker.', 'B. Microsoft Word.', 'C. Computer Game.'], ans: 'A', type: 'mcq', points: 1 },
+            'q25': { q: "Q25: Fill in the Blank: A computer is an electronic machine that processes ________________ to produce information.", ans: 'DATA', type: 'fill', points: 1 },
+            'q26': { q: "Q26: Matching (I/O): Match Keyboard (Input) and Monitor (Output).", pairs: [['1. Keyboard', 'Input'], ['2. Monitor', 'Output']], ans: {'q26-match-1': 'A', 'q26-match-2': 'B'}, type: 'match', points: 2 },
+            'q27': { q: "Q27: Multiple Choice: What is the main risk of an improper shutdown?", options: ['A. The computer will overheat.', 'B. The screen will turn yellow.', 'C. Files being corrupted or damaged.'], ans: 'C', type: 'mcq', points: 1 },
+            'q28': { q: "Q28: Fill in the Blank: MS Word is an example of a Word ________________ software.", ans: 'PROCESSOR', type: 'fill', points: 1 },
+            'q29': { q: "Q29: Multiple Choice: When not in use, where should the mouse generally be placed?", options: ['A. Hanging off the desk.', 'B. On top of the monitor.', 'C. On the mouse pad or clean desk area.'], ans: 'C', type: 'mcq', points: 1 },
+            'q30': { q: "Q30: Fill in the Blank: To include an image or chart into your document, you would use the ________________ feature.", ans: 'INSERT', type: 'fill', points: 1 },
+            'q31': { q: "Q31: Multiple Choice: The study of people's efficiency in their working environment is called:", options: ['A. Ergonomics.', 'B. Computing.', 'C. Diagnostics.'], ans: 'A', type: 'mcq', points: 1 },
+            'q32': { q: "Q32: Fill in the Blank: After clicking 'Shut Down', you should wait for the computer to completely ________________.", ans: 'TURN OFF', type: 'fill', points: 1 },
+            'q33': { q: "Q33: Matching (Purpose): Match: Monitor (Display) and Keyboard (Typing).", pairs: [['1. Monitor', 'Display'], ['2. Keyboard', 'Typing']], ans: {'q33-match-1': 'A', 'q33-match-2': 'B'}, type: 'match', points: 2 },
+            'q34': { q: "Q34: Multiple Choice: A UPS protects the computer from:", options: ['A. Viruses.', 'B. Slow internet speed.', 'C. Sudden power failure or fluctuation.'], ans: 'C', type: 'mcq', points: 1 },
+            'q35': { q: "Q35: Fill in the Blank: Changing the font, size, and color of text is known as text ________________.", ans: 'FORMATTING', type: 'fill', points: 1 },
+            'q36': { q: "Q36: Multiple Choice: Which is NOT a basic requirement for a computer to operate?", options: ['A. System Unit.', 'B. Keyboard.', 'C. Monitor.', 'D. Webcam.'], ans: 'D', type: 'mcq', points: 1 }
+        },
+        'si': { // Sinhala translations
+            'q1': { q: "Q1: බහුවරණ: පරිගණකය නිවැරදිව 'වසා දැමීමේ' (Shut Down) ක්‍රියා පටිපාටිය අනුගමනය කිරීමට ප්‍රධාන හේතුව කුමක්ද?", options: ['A. විදුලිය ඉතිරි කිරීම සඳහා.', 'B. මෘදුකාංග සහ දෘඩාංග ආරක්ෂා කිරීම සඳහා.', 'C. පරිගණකය ඉක්මනින් සිසිල් කිරීම සඳහා.', 'D. අන්තර්ජාල ඉතිහාසය මැකීමට.'], ans: 'B', type: 'mcq', points: 1 },
+            'q2': { q: "Q2: බහුවරණ: පරිගණකය රූපවාහිනියකින් වෙනස් වන්නේ එයට අවශ්‍ය වන නිසා:", options: ['A. ක්‍රියා විරහිත කිරීම සඳහා නිශ්චිත ක්‍රියා පටිපාටියක්.', 'B. විශේෂ දුරස්ථ පාලකයක්.', 'C. සෑම විටම බැටරි උපස්ථයක්.', 'D. වේගවත් අන්තර්ජාල සම්බන්ධතාවක්.'], ans: 'A', type: 'mcq', points: 1 },
+            'q3': { q: "Q3: හිස්තැන් පිරවීම: නිවැරදිව වසා දැමීම, දෘඩාංග සහ ________________ ආරක්ෂා කිරීම සඳහා වැදගත් වේ.", ans: 'මෘදුකාංග', type: 'fill', points: 1 },
+            'q4': { q: "Q4: හිස්තැන් පිරවීම: ආරම්භ කිරීමේ (Boot-up) ක්‍රියාවලියේදී බලය අවසානයේ සපයනු ලබන්නේ ________________ ඒකකයටය.", ans: 'පද්ධති', type: 'fill', points: 1 },
+            'q5': { q: "Q5: ගැලපීම (ආරම්භක අනුපිළිවෙල): නිවැරදි ආරම්භක අනුපිළිවෙල අනුව උපාංගය ගලපන්න.", pairs: [['1. UPS (බිත්ති ස්විචය)', 'පළමු පියවර'], ['2. පද්ධති ඒකකය', 'අවසාන පියවර'], ['3. මොනිටරය', 'දෙවන පියවර']], ans: {'q5-match-1': 'A', 'q5-match-2': 'C', 'q5-match-3': 'B'}, type: 'match', points: 3 },
+            'q6': { q: "Q6: ගැලපීම (උපාංග වර්ගය): උපාංගය එහි නිවැරදි වර්ගයට ගලපන්න.", pairs: [['1. මොනිටරය', 'දෘඩාංග'], ['2. මෙහෙයුම් පද්ධතිය', 'මෘදුකාංග']], ans: {'q6-match-1': 'A', 'q6-match-2': 'B'}, type: 'match', points: 2 },
+            'q7': { q: "Q7: බහුවරණ: ආරක්ෂිතව වසා දැමීමේ ක්‍රියාවලියේ පළමු පියවර කුමක්ද? (බල ස්විචය ක්‍රියා විරහිත කිරීමට පෙර)", options: ['A. ක්‍රියාත්මක වන සියලුම යෙදුම් වසා දමා ගොනු සුරැකීම.', 'B. බිත්ති සොකට්ටුවෙන් පේනුව ගැලවීම.', 'C. යතුරුපුවරුව ඉවත් කිරීම.'], ans: 'A', type: 'mcq', points: 1 },
+            'q8': { q: "Q8: හිස්තැන් පිරවීම: සෞඛ්‍ය ගැටලු වැලැක්වීමට නිවැරදි ________________ පවත්වා ගැනීම අත්‍යවශ්‍ය වේ.", ans: 'ඉරියව්ව', type: 'fill', points: 1 },
+            'q9': { q: "Q9: බහුවරණ: 'පද්ධති ඒකකය' (System Unit) සාමාන්‍යයෙන් හඳුන්වන්නේ කුමක් ලෙසද?", options: ['A. තිරය.', 'B. පරිගණක කවරය (case) හෝ ටවර්.', 'C. මූසික පෑඩය.'], ans: 'B', type: 'mcq', points: 1 },
+            'q10': { q: "Q10: හිස්තැන් පිරවීම: UPS හි සම්පූර්ණ අර්ථය බාධාවකින් තොර විදුලි ________________ යි.", ans: 'සැපයුම', type: 'fill', points: 1 },
+            'q11': { q: "Q11: බහුවරණ: මූලික නිමැවුම් (output) උපාංගයක් කුමක්ද?", options: ['A. යතුරුපුවරුව.', 'B. මුද්‍රණ යන්ත්‍රය.', 'C. මූසිකය.'], ans: 'B', type: 'mcq', points: 1 },
+            'q12': { q: "Q12: හිස්තැන් පිරවීම: පරිගණකය සක්‍රිය කිරීමේ ක්‍රියාවලිය ________________ ලෙස හැඳින්වේ.", ans: 'ආරම්භ කිරීම', type: 'fill', points: 1 },
+            'q13': { q: "Q13: බහුවරණ: මූලික ආදාන (input) උපාංගයක් කුමක්ද?", options: ['A. යතුරුපුවරුව.', 'B. මොනිටරය.', 'C. ස්පීකරය.'], ans: 'A', type: 'mcq', points: 1 },
+            'q14': { q: "Q14: හිස්තැන් පිරවීම: තිරයේ කර්සරය පාලනය කිරීමට භාවිතා කරන උපාංගය වන්නේ ________________ යි.", ans: 'මූසිකය', type: 'fill', points: 1 },
+            'q15': { q: "Q15: බහුවරණ: ඔබ පරිගණකය කෙලින්ම ක්‍රියා විරහිත කළහොත් (වසා දැමීමකින් තොරව), ඔබට සුරැකූ නොමැති දත්ත අහිමි වීමේ අවදානමක් ඇත්තේ:", options: ['A. දෘඪ තැටියෙන් (HDD).', 'B. CD-ROM වෙතින්.', 'C. RAM (මතකය) වෙතින්.'], ans: 'C', type: 'mcq', points: 1 },
+            'q16': { q: "Q16: ගැලපීම (උපාංග ක්‍රියාකාරීත්වය): උපාංගය එහි ප්‍රාථමික ක්‍රියාකාරීත්ව වර්ගයට ගලපන්න.", pairs: [['1. මුද්‍රණ යන්ත්‍රය', 'නිමැවුම්'], ['2. ස්කෑනරය', 'ආදාන']], ans: {'q16-match-1': 'A', 'q16-match-2': 'B'}, type: 'match', points: 2 },
+            'q17': { q: "Q17: හිස්තැන් පිරවීම: විදුලිය ඇනහිටීමකදී පරිගණකයට බැටරි උපස්ථයක් සපයන උපාංගය වන්නේ ________________ යි.", ans: 'UPS', type: 'fill', points: 1 },
+            'q18': { q: "Q18: බහුවරණ: තිරයේ දීප්තිය (glare) වැළැක්වීමට පරිගණක මොනිටරය තැබිය යුත්තේ කොතැනද?", options: ['A. දීප්තිමත් කවුළුවකට කෙළින්ම මුහුණලා.', 'B. සෘජු කවුළු ආලෝකයෙන් ඈත් කර.', 'C. සම්පූර්ණයෙන්ම අඳුරු කාමරයක.'], ans: 'B', type: 'mcq', points: 1 },
+            'q19': { q: "Q19: හිස්තැන් පිරවීම: ලිපි සහ වාර්තා සෑදීමට භාවිතා කරන මෘදුකාංගය Word ________________ ලෙස හැඳින්වේ.", ans: 'සකසනය', type: 'fill', points: 1 },
+            'q20': { q: "Q20: බහුවරණ: Word Processing මෘදුකාංගයක සාමාන්‍යයෙන් *නොකරන* මෙහෙයුම කුමක්ද?", options: ['A. වගු ඇතුළු කිරීම.', 'B. අකුරු රටාව වෙනස් කිරීම.', 'C. සංකීර්ණ මූල්‍ය ගණනය කිරීම්.'], ans: 'C', type: 'mcq', points: 1 },
+            'q21': { q: "Q21: හිස්තැන් පිරවීම: අකුරු තද කිරීමට (bold) හෝ ඇල කිරීමට (italic) ඔබ භාවිතා කරන්නේ පෙළ ________________ විශේෂාංගයන්ය.", ans: 'සැකසුම්', type: 'fill', points: 1 },
+            'q22': { q: "Q22: බහුවරණ: ලේඛනයක භෞතික පිටපතක් (physical copy) සෑදීමේ ක්‍රියාවලිය කුමක්ද?", options: ['A. සුරැකීම.', 'B. ස්කෑන් කිරීම.', 'C. මුද්‍රණය කිරීම.'], ans: 'C', type: 'mcq', points: 1 },
+            'q23': { q: "Q23: හිස්තැන් පිරවීම: Word Processing මෘදුකාංගය වසා දැමීමට පෙර, ඔබගේ වැඩ ________________ කිරීම අත්‍යවශ්‍ය වේ.", ans: 'සුරැකීම', type: 'fill', points: 1 },
+            'q24': { q: "Q24: බහුවරණ: දෘඩාංග (Hardware) සඳහා උදාහරණයක් කුමක්ද?", options: ['A. ස්පීකරය.', 'B. මයික්‍රොසොෆ්ට් වර්ඩ්.', 'C. පරිගණක ක්‍රීඩාව.'], ans: 'A', type: 'mcq', points: 1 },
+            'q25': { q: "Q25: හිස්තැන් පිරවීම: පරිගණකයක් යනු තොරතුරු නිපදවීම සඳහා ________________ සකසන ඉලෙක්ට්‍රොනික යන්ත්‍රයකි.", ans: 'දත්ත', type: 'fill', points: 1 },
+            'q26': { q: "Q26: ගැලපීම (I/O): යතුරුපුවරුව (ආදාන) සහ මොනිටරය (නිමැවුම්) ගලපන්න.", pairs: [['1. යතුරුපුවරුව', 'ආදාන'], ['2. මොනිටරය', 'නිමැවුම්']], ans: {'q26-match-1': 'A', 'q26-match-2': 'B'}, type: 'match', points: 2 },
+            'q27': { q: "Q27: බහුවරණ: අනිසි ලෙස පරිගණකය වසා දැමීමේ ප්‍රධාන අවදානම කුමක්ද?", options: ['A. පරිගණකය අධික ලෙස රත් වීම.', 'B. තිරය කහ පැහැයට හැරීම.', 'C. ගොනු දූෂිත වීම හෝ හානි වීම.'], ans: 'C', type: 'mcq', points: 1 },
+            'q28': { q: "Q28: හිස්තැන් පිරවීම: MS Word යනු Word ________________ මෘදුකාංගයකට උදාහරණයකි.", ans: 'සකසනය', type: 'fill', points: 1 },
+            'q29': { q: "Q29: බහුවරණ: භාවිතයේ නොමැති විට, මූසිකය සාමාන්‍යයෙන් තැබිය යුත්තේ කොතැනද?", options: ['A. මේසයෙන් එල්ලෙන්නට.', 'B. මොනිටරය මත.', 'C. මූසික පෑඩය හෝ පිරිසිදු මේස ප්‍රදේශය මත.'], ans: 'C', type: 'mcq', points: 1 },
+            'q30': { q: "Q30: හිස්තැන් පිරවීම: ඔබගේ ලේඛනයට රූපයක් හෝ ප්‍රස්ථාරයක් ඇතුළත් කිරීමට, ඔබ ________________ විශේෂාංගය භාවිතා කරනු ඇත.", ans: 'ඇතුල් කිරීම', type: 'fill', points: 1 },
+            'q31': { q: "Q31: බහුවරණ: මිනිසුන්ගේ වැඩ කරන පරිසරය තුළ කාර්යක්ෂමතාව පිළිබඳ අධ්‍යයනය හැඳින්වෙන්නේ:", options: ['A. කාර්යයෝග්‍යතාවය (Ergonomics).', 'B. පරිගණකකරණය (Computing).', 'C. රෝග විනිශ්චය (Diagnostics).'], ans: 'A', type: 'mcq', points: 1 },
+            'q32': { q: "Q32: හිස්තැන් පිරවීම: 'වසා දමන්න' (Shut Down) ක්ලික් කිරීමෙන් පසු, පරිගණකය සම්පූර්ණයෙන්ම ________________ තෙක් ඔබ බලා සිටිය යුතුය.", ans: 'ක්‍රියා විරහිත', type: 'fill', points: 1 },
+            'q33': { q: "Q33: ගැලපීම (අරමුණ): මොනිටරය (දර්ශනය) සහ යතුරුපුවරුව (ටයිප් කිරීම) ගලපන්න.", pairs: [['1. මොනිටරය', 'දර්ශනය'], ['2. යතුරුපුවරුව', 'ටයිප් කිරීම']], ans: {'q33-match-1': 'A', 'q33-match-2': 'B'}, type: 'match', points: 2 },
+            'q34': { q: "Q34: බහුවරණ: UPS පරිගණකය ආරක්ෂා කරන්නේ:", options: ['A. වෛරස් වලින්.', 'B. මන්දගාමී අන්තර්ජාල වේගයෙන්.', 'C. හදිසි විදුලිය ඇනහිටීම් හෝ උච්චාවචනයන්ගෙන්.'], ans: 'C', type: 'mcq', points: 1 },
+            'q35': { q: "Q35: හිස්තැන් පිරවීම: පෙළෙහි අකුරු, ප්‍රමාණය සහ වර්ණය වෙනස් කිරීම පෙළ ________________ ලෙස හැඳින්වේ.", ans: 'සැකසීම', type: 'fill', points: 1 },
+            'q36': { q: "Q36: බහුවරණ: පරිගණකයක් ක්‍රියාත්මක වීමට අවශ්‍ය මූලික අවශ්‍යතාවක් නොවේ කුමක්ද?", options: ['A. පද්ධති ඒකකය.', 'B. යතුරුපුවරුව.', 'C. මොනිටරය.', 'D. වෙබ් කැමරාව.'], ans: 'D', type: 'mcq', points: 1 }
+        }
+    };
+
+    let currentLang = 'en';
+
+    const translations = {
+        'en': {
+            title_h1: "Module 01: Let us Shutdown computer safely",
+            title_h2: "(Grade 6 - Information and Communication Technology)",
+            name_label: "Student Name:",
+            inst_title: "Teacher Instructions (Do Not Print)",
+            inst_p1: "This quiz is based on Module 01 (3rd lesson).",
+            inst_p2: "The Shutdown process is essential for protecting the Software and Hardware.",
+            check_btn: "Check Answers",
+            reset_btn: "Reset Quiz",
+            print_btn: "Print/Save Option",
+            lang_btn: "Switch Language: Sinhala"
+        },
+        'si': {
+            title_h1: "මොඩියුල 01: පරිගණකය සමග චාරිකාවක්",
+            title_h2: "(6 ශ්‍රේණිය - තොරතුරු හා සන්නිවේදන තාක්ෂණය)",
+            name_label: "ශිෂ්‍යයාගේ නම:",
+            inst_title: "ගුරු උපදෙස් (මුද්‍රණය නොකරන්න)",
+            inst_p1: "මෙම ප්‍රශ්නාවලිය මොඩියුල 01 (නිවැරිදිව පරිගණකය වසා දමමු)  මත පදනම් වේ.",
+            inst_p2: "වසා දැමීමේ (Shutdown) ක්‍රියාවලිය මෘදුකාංග සහ දෘඩාංග ආරක්ෂා කිරීම සඳහා අත්‍යවශ්‍ය වේ.",
+            check_btn: "පිළිතුරු පරීක්ෂා කරන්න",
+            reset_btn: "ප්‍රශ්නාවලිය නැවත සකසන්න",
+            print_btn: "මුද්‍රණය කරන්න/සුරකින්න",
+            lang_btn: "භාෂාව මාරු කරන්න: English"
+        }
+    };
+
+    // --- Core Functions ---
+
+    function toggleLanguage() {
+        currentLang = currentLang === 'en' ? 'si' : 'en';
+        renderQuiz(currentLang);
+        updateInterfaceText(currentLang);
+        resetQuiz(); // Resetting quiz state ensures answers don't carry over between languages
+    }
+
+    function updateInterfaceText(lang) {
+        document.getElementById('quiz-title-h1').innerText = translations[lang].title_h1;
+        document.getElementById('quiz-title-h2').innerText = translations[lang].title_h2;
+        document.getElementById('name-label').innerText = translations[lang].name_label;
+        document.getElementById('inst-title').innerText = translations[lang].inst_title;
+        document.getElementById('inst-p1').innerText = translations[lang].inst_p1;
+        document.getElementById('inst-p2').innerText = translations[lang].inst_p2;
+        document.getElementById('check-btn').innerText = translations[lang].check_btn;
+        document.getElementById('reset-btn').innerText = translations[lang].reset_btn;
+        document.getElementById('print-save-btn').innerText = translations[lang].print_btn;
+        document.getElementById('current-lang').innerText = lang === 'en' ? 'English' : 'සිංහල';
+    }
+
+    function renderQuiz(lang) {
+        const quizContainer = document.getElementById('quiz-questions');
+        quizContainer.innerHTML = '';
+        const langData = quizData[lang];
+
+        for (const qId in langData) {
+            const q = langData[qId];
+            let contentHTML = '';
+            
+            if (q.type === 'mcq') {
+                q.options.forEach(option => {
+                    const value = option.split('.')[0].trim();
+                    contentHTML += `<label><input type="radio" name="${qId}" value="${value}"> ${option}</label>`;
+                });
+                contentHTML = `<div class="options">${contentHTML}</div>`;
+            } else if (q.type === 'fill') {
+                contentHTML = `<div class="fill-in"><input type="text" name="${qId}" placeholder="${lang === 'en' ? 'Enter your answer here' : 'ඔබගේ පිළිතුර ඇතුලත් කරන්න'}"></div>`;
+            } else if (q.type === 'match') {
+                const columnB = q.pairs.map(p => p[1]);
+                contentHTML = `<div class="matching-container">`;
+                q.pairs.forEach((pair, index) => {
+                    const matchId = `${qId}-match-${index + 1}`;
+                    contentHTML += `<div class="matching-pair"><div>${pair[0]}</div><select name="${matchId}"><option value="">${lang === 'en' ? 'Select...' : 'තෝරන්න...'}</option>`;
+                    columnB.forEach((option, optIndex) => {
+                        const optionValue = String.fromCharCode(65 + optIndex); // A, B, C...
+                        contentHTML += `<option value="${optionValue}">${option}</option>`;
+                    });
+                    contentHTML += `</select></div>`;
+                });
+                contentHTML += `</div>`;
+            }
+
+            const quizCard = document.createElement('div');
+            quizCard.className = 'quiz-card';
+            quizCard.id = qId;
+            quizCard.setAttribute('data-q-type', q.type);
+            quizCard.innerHTML = `<h3>${q.q.split(':')[0]}</h3><p>${q.q.split(':').slice(1).join(':').trim()}</p>${contentHTML}`;
+            quizContainer.appendChild(quizCard);
+        }
+    }
+    
+    function checkAnswers() {
+        let score = 0;
+        const form = document.getElementById('ict-quiz');
+        const langData = quizData[currentLang];
+        
+        for (const qId in langData) {
+            const q = langData[qId];
+            const card = document.getElementById(qId);
+            let isCorrect = false;
+            let currentPoints = 0;
+            
+            // Clear previous feedback
+            const oldFeedback = card.querySelector('.feedback');
+            if (oldFeedback) oldFeedback.remove();
+
+            if (q.type === 'mcq') {
+                const selected = form.querySelector(`input[name="${qId}"]:checked`);
+                if (selected && selected.value === q.ans) {
+                    currentPoints = q.points;
+                    isCorrect = true;
+                }
+            } else if (q.type === 'fill') {
+                const input = form.querySelector(`input[name="${qId}"]`);
+                if (input) {
+                    // Check case-insensitive against English answer for robustness
+                    const correctEnglish = quizData.en[qId].ans.toUpperCase();
+                    if (input.value.trim().toUpperCase() === correctEnglish || input.value.trim().toUpperCase() === q.ans.toUpperCase()) {
+                         currentPoints = q.points;
+                         isCorrect = true;
+                    }
+                }
+            } else if (q.type === 'match') {
+                const correctMatches = Object.keys(q.ans).reduce((count, name) => {
+                    const select = form.querySelector(`select[name="${name}"]`);
+                    // Check against English answer values (A, B, C) for consistency
+                    const correctValue = quizData.en[qId].ans[name]; 
+                    if (select && select.value === correctValue) {
+                        return count + 1;
+                    }
+                    return count;
+                }, 0);
+                
+                // Partial scoring for matching
+                currentPoints = Math.floor(q.points * (correctMatches / Object.keys(q.ans).length));
+                if (currentPoints > 0) isCorrect = true;
+            }
+            
+            score += currentPoints;
+
+            // Provide visual feedback
+            const feedback = document.createElement('div');
+            feedback.className = 'feedback';
+            feedback.style.marginTop = '10px';
+
+            if (currentPoints === q.points) {
+                feedback.innerHTML = `<span class="correct-feedback">${currentLang === 'en' ? 'Correct!' : 'නිවැරදියි!'}</span> (+${q.points})`;
+            } else if (currentPoints > 0) {
+                 feedback.innerHTML = `<span class="incorrect-feedback">${currentLang === 'en' ? 'Partially Correct.' : 'අර්ධ වශයෙන් නිවැරදියි.'}</span> (+${currentPoints}/${q.points})`;
+            } else {
+                // If it's a matching question, show 0/X points
+                const pointsDisplay = q.type === 'match' ? ` (+0/${q.points})` : ``;
+                feedback.innerHTML = `<span class="incorrect-feedback">${currentLang === 'en' ? 'Incorrect.' : 'වැරදියි.'}</span>${pointsDisplay}`;
+            }
+            card.appendChild(feedback);
+        }
+
+        const studentName = document.getElementById('student-name').value || (currentLang === 'en' ? "Student" : "ශිෂ්‍යයා");
+        const scoreDisplay = document.getElementById('score-display');
+        
+        const totalMaxScore = Object.values(quizData.en).reduce((sum, q) => sum + q.points, 0);
+        const percentage = ((score / totalMaxScore) * 100).toFixed(1);
+
+        const scoreText = currentLang === 'en' 
+            ? `Great work, ${studentName}! Your score is: ${score} / ${totalMaxScore} (${percentage}%)`
+            : `${studentName} නියමයි! ඔබගේ ලකුණු: ${score} / ${totalMaxScore} (${percentage}%)`;
+            
+        scoreDisplay.innerHTML = scoreText;
+        scoreDisplay.style.display = 'block';
+    }
+
+    function resetQuiz() {
+        document.getElementById('ict-quiz').reset();
+        document.getElementById('score-display').style.display = 'none';
+        
+        // Clear all feedback
+        const cards = document.querySelectorAll('.quiz-card');
+        cards.forEach(card => {
+            const oldFeedback = card.querySelector('.feedback');
+            if (oldFeedback) oldFeedback.remove();
+        });
+    }
+
+    function printQuiz() {
+        window.print();
+    }
+
+    // Initialize the quiz on page load
+    document.addEventListener('DOMContentLoaded', () => {
+        renderQuiz('en');
+        updateInterfaceText('en');
+    });
+</script>
+</body>
+</html>

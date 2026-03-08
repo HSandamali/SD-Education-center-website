@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Notepad Study Note (Bilingual)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&family=Noto+Sans+Sinhala:wght@400;700&display=swap&family=Fugaz+One" rel="stylesheet">
+    <style>
+        /* --- General Styles and Variables --- */
+        :root {
+            --color-primary: #FF5733; /* Bright Orange-Red */
+            --color-secondary: #33FF57; /* Bright Green */
+            --color-background: #FFECB3; /* Light Yellow Background */
+            --color-text: #333333;
+            --font-english: 'Poppins', sans-serif;
+            --font-sinhala: 'Noto Sans Sinhala', sans-serif;
+            --font-heading: 'Fugaz One', cursive;
+        }
+
+        body {
+            font-family: var(--font-english);
+            background-color: var(--color-background);
+            color: var(--color-text);
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+            overflow: hidden; /* Control overflow for floating elements */
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: #FFFFFF;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border: 6px solid var(--color-primary);
+            position: relative;
+            z-index: 10;
+        }
+
+        h1 {
+            font-family: var(--font-heading);
+            color: var(--color-primary);
+            font-size: 2.5em;
+            text-shadow: 3px 3px 0 var(--color-secondary);
+            margin-bottom: 20px;
+        }
+
+        /* --- Floating Interactive Elements (Theming) --- */
+        .floating-interactive {
+            position: absolute;
+            cursor: pointer;
+            z-index: 5;
+            transition: transform 0.5s ease-in-out;
+            animation: float 15s infinite ease-in-out;
+            border-radius: 50%;
+            padding: 12px; /* Increased padding */
+            /* CORRECTION: Increased font size (larger objects) */
+            font-size: 5em; 
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4); 
+            line-height: 1; 
+        }
+
+        .floating-interactive:hover {
+            transform: scale(1.3); /* Slightly larger hover scale */
+            box-shadow: 0 0 20px rgba(255, 87, 51, 0.7); /* Red/Orange glow on hover */
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-25px) rotate(8deg); } /* Increased float distance */
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        /* Set positions and animation durations for floating items */
+        .float-1 { top: 5%; left: 80%; animation-duration: 18s; animation-delay: 0s; }
+        .float-2 { top: 25%; left: 5%; animation-duration: 14s; animation-delay: 4s; }
+        .float-3 { bottom: 10%; right: 10%; animation-duration: 20s; animation-delay: 8s; }
+        .float-4 { top: 60%; right: 3%; animation-duration: 16s; animation-delay: 2s; }
+        .float-5 { bottom: 20%; left: 20%; animation-duration: 13s; animation-delay: 6s; }
+        .float-6 { top: 15%; right: 20%; animation-duration: 17s; animation-delay: 1s; } /* New object */
+        .float-7 { bottom: 5%; left: 45%; animation-duration: 19s; animation-delay: 5s; } /* New object */
+        .float-8 { top: 75%; left: 5%; animation-duration: 15s; animation-delay: 3s; } /* New object */
+
+
+        /* --- Fact Card Styling --- */
+        .fact-card {
+            background-color: #FFFFF0;
+            border: 3px solid var(--color-secondary);
+            padding: 15px;
+            border-radius: 12px;
+            margin: 15px 0;
+            text-align: left;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .fact-card h3 {
+            color: var(--color-primary);
+            margin-top: 0;
+            border-bottom: 2px dashed #ccc;
+            padding-bottom: 5px;
+        }
+
+        .fact-card p {
+            font-size: 1.1em;
+            margin: 5px 0;
+        }
+
+        .sinhala-text {
+            font-family: var(--font-sinhala);
+            color: #4B0082;
+            font-weight: bold;
+            display: block;
+            margin-top: 5px;
+            font-size: 0.95em;
+        }
+
+        /* --- Popup (Modal) Styles (Kept for consistency) --- */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .popup-content {
+            background: #fff;
+            padding: 25px;
+            border-radius: 15px;
+            max-width: 450px;
+            width: 90%;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            animation: popIn 0.3s ease-out;
+            text-align: left;
+        }
+
+        .popup-close {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 1.5em;
+            font-weight: bold;
+            cursor: pointer;
+            color: var(--color-primary);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="floating-interactive float-1" onclick="showExplanation('open')">🐰</div>
+    <div class="floating-interactive float-2" onclick="showExplanation('save')">🧸</div>
+    <div class="floating-interactive float-3" onclick="showExplanation('type')">🐠</div>
+    <div class="floating-interactive float-4" onclick="showExplanation('close')">🐰</div>
+    <div class="floating-interactive float-5" onclick="showExplanation('important')">🧸</div>
+    <div class="floating-interactive float-6" onclick="showExplanation('cursor')">🐠</div>
+    <div class="floating-interactive float-7" onclick="showExplanation('extension')">🐰</div>
+    <div class="floating-interactive float-8" onclick="showExplanation('formatting')">🧸</div>
+
+    <div class="container">
+        
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h1 id="main-title">Notepad Star Learner!</h1>
+            <button id="language-btn" onclick="toggleLanguage()">සිංහල / English</button>
+        </div>
+
+        <div class="fact-card">
+            <h3 id="intro-title">Welcome to Notepad Learning!</h3>
+            <p id="intro-fact-1">Notepad is your first step into computers! It helps you practice typing and learn how to save digital documents easily.</p>
+            <p id="intro-fact-2" class="sinhala-text">නෝට්පෑඩ් ඉගෙනීමට ඔබව සාදරයෙන් පිළිගනිමු! එය ඔබට ටයිප් කිරීම පුහුණු කිරීමට සහ ඩිජිටල් ලේඛන පහසුවෙන් සුරැකීමට ඉගෙන ගැනීමට උපකාරී වේ.</p>
+        </div>
+
+        <div class="fact-card">
+            <h3 id="keys-title">Practice Makes Perfect</h3>
+            <p id="keys-fact-1">The keyboard is your tool. Use the Spacebar for gaps, Enter for a new line, and Backspace to fix small mistakes.</p>
+            <p id="keys-fact-2" class="sinhala-text">යතුරුපුවරුව ඔබේ මෙවලමයි. හිඩැස් සඳහා Spacebar භාවිතා කරන්න, නව පේළියක් සඳහා Enter භාවිතා කරන්න, සහ කුඩා වැරදි නිවැරදි කිරීමට Backspace භාවිතා කරන්න.</p>
+        </div>
+
+        <p style="margin-top: 30px; font-weight: bold;" id="click-prompt">Click the floating animals and toys to learn essential Notepad skills! ☝️</p>
+        <p style="margin-top: 30px; font-weight: bold;" class="sinhala-text" id="click-prompt-si">වැඩිදුර විස්තර ඉගෙන ගැනීමට පාවෙන සතුන් සහ සෙල්ලම් බඩු මත ක්ලික් කරන්න! ☝️</p>
+
+    </div>
+
+    <div class="popup-overlay" id="explanation-popup">
+        <div class="popup-content">
+            <span class="popup-close" onclick="closeExplanation()">&times;</span>
+            <h3 id="popup-title"></h3>
+            <p id="popup-content-en"></p>
+            <p id="popup-content-si" class="sinhala-text"></p>
+        </div>
+    </div>
+
+    <script>
+        let language = 'en';
+
+        // --- Data for Floating Interactive Elements (Updated with 5 Core Actions + 3 Extra Facts) ---
+        const interactiveFacts = {
+            'open': {
+                title_en: "How to Open Notepad",
+                title_si: "නෝට්පෑඩ් විවෘත කරන්නේ කෙසේද?",
+                fact_en: "To open Notepad quickly, click the Search bar on the taskbar and simply type 'notepad'. Then click the app icon!",
+                fact_si: "නෝට්පෑඩ් ඉක්මනින් විවෘත කිරීමට, taskbar එකේ ඇති Search bar එක ක්ලික් කර 'notepad' ටයිප් කරන්න. ඉන්පසු යෙදුම් නිරූපකය ක්ලික් කරන්න!",
+                emoji: "🔍"
+            },
+            'save': {
+                title_en: "How to Save Your File",
+                title_si: "ඔබගේ ගොනුව සුරකින්නේ කෙසේද?",
+                fact_en: "Go to File > Save As... to choose a name and a location (like the Desktop). After the first time, use Ctrl + S to save changes quickly!",
+                fact_si: "නමක් සහ ස්ථානයක් (Documents වැනි) තෝරා ගැනීමට File > Save As... වෙත යන්න. පළමු වතාවෙන් පසු, වෙනස්කම් ඉක්මනින් සුරැකීමට Ctrl + S භාවිතා කරන්න!",
+                emoji: "💾"
+            },
+            'type': {
+                title_en: "How to Type and Move",
+                title_si: "ටයිප් කරන පේලි අතර ගමන් කරන්නේ කෙසේද?",
+                fact_en: "Just start typing! To jump a paragraph forward, use the Tab key. Use the arrow keys (←↑↓→) to move your cursor without deleting anything.",
+                fact_si: "ටයිප් කිරීම ආරම්භ කරන්න! ඡේදයක් ඉදිරියට පැනීමට, Tab යතුර භාවිතා කරන්න. කිසිවක් මකා නොදමා ඔබේ කර්සරය ගෙන යාමට ඊතල යතුරු (←↑↓→) භාවිතා කරන්න.",
+                emoji: "✍️"
+            },
+            'close': {
+                title_en: "How to Close Notepad",
+                title_si: "නෝට්පෑඩ් වසා දමන්නේ කෙසේද?",
+                fact_en: "Click the X button in the top right corner. STOP! If you haven't saved, it will ask you if you want to save first. Always say yes!",
+                fact_si: "ඉහළ දකුණු කෙළවරේ ඇති X බොත්තම ක්ලික් කරන්න. නවතින්න! ඔබ සුරැකුවේ නැතිනම්, මුලින්ම සුරැකීමට අවශ්‍ය දැයි එය ඔබෙන් අසනු ඇත. සෑම විටම ඔව් කියන්න!",
+                emoji: "❌"
+            },
+            'important': {
+                title_en: "Why Notepad is Important",
+                title_si: "නෝට්පෑඩ් වැදගත් වන්නේ ඇයි?",
+                fact_en: "Notepad teaches you the basics of file management and the keyboard. It's the simplest way to type and save text on a computer!",
+                fact_si: "නෝට්පෑඩ් ඔබට ගොනු කළමනාකරණයේ මූලික කරුණු සහ යතුරුපුවරුව උගන්වයි. පරිගණකයක පාඨ ටයිප් කර සුරැකීමට ඇති සරලම ක්‍රමය එයයි!",
+                emoji: "💡"
+            },
+            'cursor': {
+                title_en: "What is the Cursor?",
+                title_si: "කර්සරය යනු කුමක්ද?",
+                fact_en: "The cursor is the small, flashing vertical line ( | ). It marks the exact position where your next typed letter will appear.",
+                fact_si: "කර්සරය යනු කුඩා, නිවෙන දැල්වෙන සිරස් රේඛාවයි (|). ඔබ ටයිප් කරන ඊළඟ අකුර දිස්වන නිශ්චිත ස්ථානය එය සලකුණු කරයි.",
+                emoji: "👀"
+            },
+            'extension': {
+                title_en: "File Extension (.txt)",
+                title_si: "ගොනු දිගුව (.txt)",
+                fact_en: "All Notepad files must end with .txt. This is the standard label that tells the computer it is a plain text document.",
+                fact_si: "සියලුම නෝට්පෑඩ් ගොනු .txt වලින් අවසන් විය යුතුය. එය සරල පාඨ ලේඛනයක් බව පරිගණකයට පවසන සම්මත ලේබලය මෙයයි.",
+                emoji: "🏷️"
+            },
+            'formatting': {
+                title_en: "Changing the Font",
+                title_si: "අකුරු වෙනස් කිරීම",
+                fact_en: "You can't change the color, but you can change the font style and size! Look in the Format Menu and click Font.",
+                fact_si: "ඔබට වර්ණය වෙනස් කළ නොහැක, නමුත් ඔබට අකුරු විලාසය සහ ප්‍රමාණය වෙනස් කළ හැකිය! Format Menu එකේ බලා Font ක්ලික් කරන්න.",
+                emoji: "🎨"
+            }
+        };
+
+        // --- UI Functions ---
+
+        function updateLanguage(lang) {
+            language = lang;
+            const isSinhala = lang === 'si';
+
+            // General Text Updates
+            document.getElementById('main-title').textContent = isSinhala ? "පරිගණක භාවිතයෙන් යතුරු ලියනය කරමු!" : "Lets type with computer";
+            document.getElementById('language-btn').textContent = isSinhala ? "English / සිංහල" : "සිංහල / English";
+            document.getElementById('intro-title').textContent = isSinhala ? "නෝට්පෑඩ් ඉගෙනීමට සාදරයෙන් පිළිගනිමු!" : "Welcome to Notepad Learning!";
+            document.getElementById('keys-title').textContent = isSinhala ? "පුහුණුවෙන් පරිපූර්ණ වේ" : "Practice Makes Perfect";
+            document.getElementById('click-prompt').style.display = isSinhala ? 'none' : 'block';
+            document.getElementById('click-prompt-si').style.display = isSinhala ? 'block' : 'none';
+
+            // Fact Display Updates (Toggle visibility of Sinhala/English fact paragraphs)
+            document.getElementById('intro-fact-2').style.display = isSinhala ? 'block' : 'none';
+            document.getElementById('keys-fact-2').style.display = isSinhala ? 'block' : 'none';
+
+            document.getElementById('intro-fact-1').style.display = isSinhala ? 'none' : 'block';
+            document.getElementById('keys-fact-1').style.display = isSinhala ? 'none' : 'block';
+            
+            // Re-check and update any currently open popup if necessary
+            if (document.getElementById('explanation-popup').style.display === 'flex') {
+                const currentFactId = document.getElementById('popup-title').getAttribute('data-fact-id');
+                if (currentFactId) showExplanation(currentFactId);
+            }
+        }
+
+        function toggleLanguage() {
+            const newLang = language === 'en' ? 'si' : 'en';
+            updateLanguage(newLang);
+        }
+
+        function showExplanation(factId) {
+            const fact = interactiveFacts[factId];
+            const isSinhala = language === 'si';
+
+            // Set the content of the popup
+            document.getElementById('popup-title').innerHTML = fact.emoji + " " + (isSinhala ? fact.title_si : fact.title_en);
+            document.getElementById('popup-title').setAttribute('data-fact-id', factId);
+            document.getElementById('popup-content-en').innerHTML = fact.fact_en; // Use innerHTML to preserve bold tags
+            document.getElementById('popup-content-si').innerHTML = fact.fact_si;
+
+            // Manage language visibility in the popup
+            document.getElementById('popup-content-en').style.display = isSinhala ? 'none' : 'block';
+            document.getElementById('popup-content-si').style.display = isSinhala ? 'block' : 'none';
+
+            // Show the popup
+            document.getElementById('explanation-popup').style.display = 'flex';
+        }
+
+        function closeExplanation() {
+            document.getElementById('explanation-popup').style.display = 'none';
+        }
+
+        // --- Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            updateLanguage('en');
+        });
+    </script>
+</body>
+</html>

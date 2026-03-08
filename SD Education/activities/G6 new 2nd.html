@@ -1,0 +1,785 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>How to Power On a Computer — Bilingual Activity / පරිගණකය නිවැරිදිව බලගන්වමු</title>
+<style>
+:root{
+  --bg:#E3F2FD;
+  --card:#ffffff;
+  --accent:#0288D1;
+  --accent2:#26C6DA;
+  --text:#0D47A1;
+  --accent3:#81C784;
+  --success:#2e7d32;
+  --danger:#c62828;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family: "Noto Sans", "Segoe UI", Arial, sans-serif;
+  background:linear-gradient(135deg,var(--bg),#B3E5FC);
+  color:var(--text);
+  padding:18px;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+header{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px}
+.title{display:flex;align-items:center;gap:12px}
+.logo{
+  width:64px;height:64px;border-radius:12px;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 10px rgba(0,0,0,.18);
+}
+h1{margin:0;font-size:20px}
+.lead{margin:0;color:#1565C0}
+.input,button,select,textarea{padding:8px 10px;border-radius:8px;border:2px solid rgba(0,0,0,.06);font-size:14px}
+button{background:var(--accent);color:#fff;border:none;cursor:pointer}
+button.secondary{background:var(--accent2)}
+.grid{display:grid;grid-template-columns:360px 1fr;gap:16px;margin-top:18px}
+.card{background:var(--card);border-radius:12px;padding:14px;box-shadow:0 8px 18px rgba(0,0,0,.08)}
+.floaty{position:absolute;top:-15px;right:-10px;width:90px;height:90px;
+  background:linear-gradient(135deg,var(--accent3),var(--accent2));
+  border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;
+  font-weight:700;font-size:20px;animation:float 6s ease-in-out infinite;}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-15px)}}
+.blinker{animation:blink 1s step-end infinite}
+@keyframes blink{50%{opacity:0}}
+.teacher{font-size:13px;background:#E0F7FA;padding:10px;border-radius:8px;border:1px dashed var(--accent)}
+.scorebox{display:flex;justify-content:space-between;align-items:center;margin-top:10px}
+.scorebig{font-size:20px;font-weight:800;color:var(--accent)}
+.q{background:#FAFAFA;border-radius:10px;padding:12px;margin:10px 0;border:2px dashed rgba(0,0,0,.05)}
+.q h3{margin:0;color:#01579B;font-size:16px}
+.langline{display:block;margin-top:6px;color:#0b3b63}
+.options{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+.opt{padding:8px 10px;border-radius:8px;border:2px solid #ccc;background:#fff;cursor:pointer}
+.opt.correct{border-color:var(--success);background:#E8F5E9}
+.opt.wrong{border-color:var(--danger);background:#FFEBEE}
+.match-area{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
+.match-col{flex:1;min-width:200px}
+.drag-item{padding:8px;border-radius:8px;background:#fff;border:2px solid #ccc;margin:6px 0;cursor:grab}
+.drop-target{padding:8px;border-radius:8px;background:#E3F2FD;border:2px dashed #90CAF9;min-height:40px;display:flex;align-items:center;justify-content:center}
+.reorder-list{list-style:none;padding:0;margin:8px 0}
+.reorder-item{padding:8px;margin:6px 0;border:2px solid #ccc;border-radius:8px;background:#fff;cursor:grab}
+.btn-link{background:var(--accent2);color:#fff;border:none;padding:8px 12px;border-radius:8px;margin-left:6px;cursor:pointer}
+.btn-link:hover{opacity:.95}
+.footer-small{font-size:13px;color:#0D47A1;margin-top:10px}
+.femoji{
+  position:fixed;font-size:28px;pointer-events:none;opacity:0.95;z-index:999;
+  animation:floatEmoji linear infinite;
+}
+@keyframes floatEmoji{
+  0%{transform:translateY(120vh) rotate(0deg); opacity:0}
+  10%{opacity:1}
+  90%{opacity:1}
+  100%{transform:translateY(-120vh) rotate(720deg); opacity:0}
+}
+.small{font-size:13px;color:#4a4a4a}
+.hint{font-size:13px;color:#555;margin-top:6px}
+@media(max-width:900px){.grid{grid-template-columns:1fr}.floaty{display:none}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="title">
+    <div class="logo">PC</div>
+    <div>
+      <h1>How to Power On a Computer — Activity</h1>
+      <div class="lead">How to start a computer • පරිගණකය බලගැන්වීම</div>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:8px;align-items:center;">
+    <input id="name" class="input" placeholder="Student name • ශිෂ්‍යගේ නම" />
+    <select id="grade" class="input">
+      <option value="">Grade • ශ්‍රේණිය</option>
+      <option>Grade 5 • පන්තිය 5</option>
+      <option>Grade 6 • පන්තිය 6</option>
+      <option>Grade 7 • පන්තිය 7</option>
+    </select>
+    <button id="saveBtn" class="btn-link">💾 Save • සුරකින්න</button>
+    <button id="printBtn" class="btn-link">🖨 Print • මුද්‍රණය කරන්න</button>
+    <button id="resetBtn" class="btn-link">🔄 Reset • නැවත සකසන්න</button>
+  </div>
+</header>
+
+<div class="grid" style="margin-top:16px;">
+  <div class="card" style="position:relative;">
+    <div class="floaty blinker">ON</div>
+
+    <div class="teacher">
+      <strong>Teacher instructions • ගුරු උපදෙස්:</strong>
+      <ul style="margin:8px 0 0 18px;">
+        <li>Explain steps before students try the quiz. •  ශිෂ්‍යයන්ට මෙම ක්‍රියාකාරකම කරන අන්දම පැහැදිලි කරන්න.</li>
+        <li>Let them work in pairs for drag-and-drop. • කණ්ඩායම් ක්‍රියාකාරකමක් ලෙස ද කළ හැකිය.</li>
+        <li>Use Save for digital records and Print for paper copies. • දරුවන්ගේ වාර්තා තබා ගත හැකිය.</li>
+      </ul>
+    </div>
+
+    <div style="margin-top:10px;">
+      <div class="small">Current score • ඔබගේ ලකුණු</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:6px">
+        <div>
+          <div id="score" class="scorebig">0 / 30</div>
+        </div>
+        <div style="text-align:right">
+          <div class="small">Answered • පිළිතුරු ලබා දුන්</div>
+          <div id="answered" class="scorebig" style="font-size:16px">0 / 30</div>
+        </div>
+      </div>
+      <div id="liveFeedback" style="margin-top:10px;padding:8px;border-radius:8px;background:#E1F5FE">
+        Start answering — score updates automatically. • පිළිතුරු ඇතුළත් කරන්න — ලකුණු ස්වයංක්‍රියව යාවත්කාලීන වේ.
+      </div>
+    </div>
+
+    <div style="margin-top:12px;">
+      <div class="small">Quick tips • ඉඟි:</div>
+      <ul style="margin:6px 0 0 18px;">
+        <li>Turn on UPS first, then system unit, then monitor. • මුලින් UPS ක්‍රියාත්මක කරන්න, පසුව system unit, පසුව monitor.</li>
+        <li>Wait until the desktop appears before typing. • ටයිප් කිරීමට පෙර ඩෙස්ක්ටොප් එක දිස්වන තුරු රැඳී සිටින්න..</li>
+        <li>Keep hands dry when touching plugs. • විදුලි පේනු ඇල්ලීමට පෙර විට අත් වියළා ගන්න.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card" id="activityArea">
+    <!-- Questions injected here -->
+  </div>
+</div>
+
+<div class="footer-small">Floating emojis • උඩින් පාවෙන ඉමොජි: 💻 🖱️ ⌨️ 🖥️ ⚡</div>
+
+<!-- Floating emojis (computer related) -->
+<script>
+// ✅ FIXED FLOATING EMOJIS (ensures animation always runs after full page load)
+window.addEventListener('load', () => {
+  const emojis = ["💻","🖱️","⌨️","🖥️","⚡"];
+  for (let i = 0; i < 18; i++) {
+    const e = document.createElement('div');
+    e.className = 'femoji';
+    e.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+    e.style.left = Math.random() * 100 + 'vw';
+    e.style.fontSize = (20 + Math.random() * 30) + 'px';
+    e.style.animationDuration = (10 + Math.random() * 14) + 's';
+    e.style.animationDelay = Math.random() * 6 + 's';
+    document.body.appendChild(e);
+  }
+});
+</script>
+
+<script>
+/* ===== BILINGUAL QUIZ DATA (English + Sinhala display) =====
+   Types: mcq, tf, fill, match, reorder
+   Keep answers logic unchanged; accept Sinhala equivalents for fill-ins too.
+*/
+const questions = [
+  // 1-12 MCQ
+  {id:1,type:'mcq',
+   q_en:"What should you switch on first before the computer?",
+   q_si:"පරිගණකය බල ගැන්වීම සඳහා ඔබ මුලින්ම ක්‍රියාත්මක කළ යුත්තේ කුමක්ද?",
+   options:[
+     {en:"Monitor", si:"මොනිටරය / Monitor"},
+     {en:"UPS", si:"UPS (නිර්බාධක ජව සැපයුම)"},
+     {en:"Mouse", si:"මූසිකය"}
+   ], answer:1},
+
+  {id:2,type:'mcq',
+   q_en:"Which button starts the computer?",
+   q_si:"පරිගණකය ආරම්භ කරන්නේ කුමන බොත්තමෙන් ද?",
+   options:[
+     {en:"Keyboard key", si:"යතුරු පුවරුවේ යතුර"},
+     {en:"System Unit power button", si:"පද්ධති ඒකකයේ Power බොත්තම"},
+     {en:"Mouse button", si:"මවුස් බොත්තම"}
+   ], answer:1},
+
+  {id:3,type:'mcq',
+   q_en:"What shows pictures and programs after the computer starts?",
+   q_si:"පරිගණකය ආරම්භ වූ පසු රූප සහ වැඩසටහන් පෙන්නන්නේ කුමකින්ද?",
+   options:[
+     {en:"Monitor", si:"මොනිටරය / Monitor"},
+     {en:"UPS", si:"UPS (නිර්බාධක ජව සැපයුම)"},
+     {en:"Printer", si:"මුද්‍රණ යන්ත්‍රය"}
+   ], answer:0},
+
+  {id:4,type:'mcq',
+   q_en:"When you press power the computer does what?",
+   q_si:"Power බොත්තම එබූ විට පරිගණකය කරන්නේ කුමක්ද??",
+   options:[
+     {en:"Sings", si:"ගායනය කරයි"},
+     {en:"Starts/boots up", si:"ආරම්භ වෙයි / boot වේ"},
+     {en:"Cleans desk", si:" මේසය පිරිසිදු කරයි"}
+   ], answer:1},
+
+  {id:5,type:'mcq',
+   q_en:"Which is safe to touch with wet hands? (trick)",
+   q_si:"තෙත අත් සහිතව ස්පර්ශ කිරීම අනාරක්ෂිත වන්නේ කුමක්ද?"
+   ,options:[
+     {en:"Cable plug", si:"කේබල් ප්ලග්"},
+     {en:"Nothing", si:"කිසිවක් නැත"},
+     {en:"Power button", si:"Power බොත්තම"}
+   ], answer:1},
+
+  {id:6,type:'mcq',
+   q_en:"What is UPS for?",
+   q_si:"UPS වල අදහස කුමක්ද?",
+   options:[
+     {en:"Uninterupted power supply", si:"නිර්බාධක ජව සැපයුම"},
+     {en:"Making sound", si:"ශබ්ද නිර්මාණය"},
+     {en:"Store files", si:"ගොනු ගබඩා කිරීම"}
+   ], answer:0},
+
+  {id:7,type:'mcq',
+   q_en:"If screen is black after turning on, you should:",
+   q_si:"ආරම්භ කළ පසු කිසිවක් තිරයේ නොපෙනේ නම්, ඔබ කළ යුත්තේ කුමක්ද?:",
+   options:[
+     {en:"Wait and check cables", si:"මිනිත්තු කිහිපයක් බලා කේබල් පරීක්ෂා කරන්න"},
+     {en:"Pull the cables", si:"කේබල් ගලවා නැවත සවි කරන්න"},
+     {en:"Throw the monitor", si:"මොනිටරය බල ගැන්විය යුතුය"}
+   ], answer:0},
+
+  {id:8,type:'mcq',
+   q_en:"Before switching on, check that:",
+   q_si:"පරිගණකය බල ගැන්වීමට පෙර, පරීක්ෂා කළ යුතු දේ මොනවාද?:",
+   options:[
+     {en:"Cables are connected", si:"කේබල් සියල්ල සම්බන්ධ කර ඇති ද"},
+     {en:"Keyboard is typing by itself", si:"යතුරු පුවරුව ඉබේ ක්‍රියාත්මක ද"},
+     {en:"You ate breakfast", si:"ඔබ  උදෑසන ආහාරය ගෙන ද"}
+   ], answer:0},
+
+  {id:9,type:'mcq',
+   q_en:"What appears after system boots?",
+   q_si:"බූට් වීමෙන් තිරයේ පෙනෙන්නේ කුමක්ද?",
+   options:[
+     {en:"Desktop with icons", si:" icons සහිත ඩෙස්ක්ටොප් පෙන්වනු ලැබේ"},
+     {en:"TV channel list", si:"ටීවී චැනල් ලැයිස්තුව"},
+     {en:"Telephone dialer", si:"දුරකථන යතුරු පුවරුව"}
+   ], answer:0},
+
+  {id:10,type:'mcq',
+   q_en:"Which is correct order to turn on?",
+   q_si:"කුමන අනුපිළිවෙල නිවැරිදි ද?",
+   options:[
+     {en:"Monitor → UPS → System Unit", si:"මොනිටරය → UPS → System Unit"},
+     {en:"UPS → System Unit → Monitor", si:"UPS → System Unit → මොනිටරය"},
+     {en:"System Unit → Monitor → UPS", si:"System Unit → මොනිටරය → UPS"}
+   ], answer:1},
+
+  {id:11,type:'mcq',
+   q_en:"If you touch plug with wet hands what can happen?",
+   q_si:"තෙත අත් වලින් කේබල් හා කෙවෙනි ස්පර්ශ කිරීමෙන් විය හැකි අනතුරු වන්නේ?",
+   options:[
+     {en:"Nothing", si:"කිසිවක් නොවේ"},
+     {en:"It can be dangerous", si:" එය අවදානම් විය හැක"},
+     {en:"It makes cable clean", si:"එය කේබල් පිරිසිදු කරයි"}
+   ], answer:1},
+
+  {id:12,type:'mcq',
+   q_en:"Where is the power button usually located?",
+   q_si:"power බොත්තම  පිහිටා ඇත්තේ කොහේද?",
+   options:[
+     {en:"On the system unit", si:"System unit මත"},
+     {en:"On the floor", si:"පොළවෙහි"},
+     {en:"Inside the keyboard keys", si:"යතුරු පුවරුව තුළ"}
+   ], answer:0},
+
+  // 13-18 True/False
+  {id:13,type:'tf',
+   q_en:"You must wait until the desktop appears before opening programs.",
+   q_si:"වැඩසටහන් විවෘත කිරීමට පෙර ඩෙස්ක්ටොප් එක දිස්වන තුරු ඔබ රැඳී සිටිය යුතුය..",
+   answer:true},
+
+  {id:14,type:'tf',
+   q_en:"You should pull cables roughly to remove them quickly.",
+   q_si:"කේබල් ඉක්මනින් ඉවත් කිරීමට ඔබ ඒවා තදින් ඇදිය යුතුය..",
+   answer:false},
+
+  {id:15,type:'tf',
+   q_en:"Monitor needs its own power on button sometimes.",
+   q_si:"මොනිටරය සඳහා power බොත්තම ක් අවශ්‍ය විය හැක.",
+   answer:true},
+
+  {id:16,type:'tf',
+   q_en:"UPS helps to keep the computer safe during a power cut.",
+   q_si:"විදුලිය විසන්ධි වීමකදී UPS පරිගණකය ආරක්ෂා කරයි.",
+   answer:true},
+
+  {id:17,type:'tf',
+   q_en:"It is okay to touch plugs with wet hands.",
+   q_si:"තෙත් දෑතින් ප්ලග් ස්පර්ශ කිරීම සුදුසුයි..",
+   answer:false},
+
+  {id:18,type:'tf',
+   q_en:"Turn on system unit before UPS for safety.",
+   q_si:"ආරක්ෂාව සඳහා UPS ක්‍රියාත්මක කිරීමට පෙර system unit ක්‍රියාත්මක කරන්න.",
+   answer:false},
+
+  // 19-24 Fill-in (accept English or Sinhala equivalent)
+  {id:19,type:'fill',
+   q_en:"To start the computer we press the ______ button on the system unit.",
+   q_si:"පරිගණකය ආරම්භ කිරීමට system unit මත ______ බොත්තම ඔබන්න.",
+   answerEN:"power", answerSI:["power බොත්තම","පවර්"]},
+
+  {id:20,type:'fill',
+   q_en:"The ______ shows what the computer is doing (screen).",
+   q_si:"________ පරිගණකය කරන දේ පෙන්වයි (තිරය).",
+   answerEN:"monitor", answerSI:["මොනිටරය","තිරය"]},
+
+  {id:21,type:'fill',
+   q_en:"A small box that gives backup power is called ______.",
+   q_si:"නිර්බාධකවබලය සැපයෙන උපකරණය ______ ලෙස හැඳින්වේ.",
+   answerEN:"ups", answerSI:["ups","යූපීඑස්","UPS"]},
+
+  {id:22,type:'fill',
+   q_en:"When the system starts, you usually see the ______ (two words).",
+   q_si:"පරිගණකය ආරම්භ වන විට ඔබ සාමාන්‍යයෙන් ______ (වචන 2) දකියි.",
+   answerEN:"desktop screen", answerSI:["ඩෙස්ක්ටොප් ස්ක්‍රීන්","ඩෙස්ක්ටොප්"]},
+
+  {id:23,type:'fill',
+   q_en:"If cables are loose, the computer may not ______ properly.",
+   q_si:"කේබල් ලිහිල් නම්, පරිගණකය නිසි ලෙස ______ නොවිය හැකිය.",
+   answerEN:"start", answerSI:["ආරම්භ","start","ඇරඹුම"]},
+
+  {id:24,type:'fill',
+   q_en:"Before touching plugs make sure your hands are ______.",
+   q_si:"විදුලි පේනු ඇල්ලීමට පෙර ඔබගේ අත් ______ බවට පරීක්ෂා කරන්න.",
+   answerEN:"dry", answerSI:["වියළි","dry"]},
+
+  // 25-28 Matching (drag & drop)
+  {id:25,type:'match',
+   q_en:"Match the part with its job.",
+   q_si:" කොටස සහ එහි කාර්යය ගලපන්න.",
+   pairs:[
+     {left_en:"UPS", left_si:"UPS (නිර්බාධක ජව සැපයුම)", right_en:"Backup power", right_si:"උපස්ථ බලය"},
+     {left_en:"Monitor", left_si:"මොනිටරය", right_en:"Displays images", right_si:"රූප පෙන්වයි"},
+     {left_en:"Keyboard", left_si:"යතුරු පුවරුව", right_en:"Types letters", right_si:"අකුරු ටයිප් කරයි"},
+     {left_en:"System Unit", left_si:"System Unit", right_en:"Houses the computer parts", right_si:"පරිගණකයේ කොටස් අන්තර්ගත වේ"}
+   ]},
+
+  // 29-30 Reorder
+  {id:29,type:'reorder',
+   q_en:"Arrange the correct order to switch on (first → last).",
+   q_si:"ක්‍රියාත්මක කිරීමට නිවැරදි අනුපිළිවෙල සකසන්න (පළමු → අවසාන):",
+   items_en:["Monitor","System Unit","UPS"], correctOrder_en:["UPS","System Unit","Monitor"],
+   items_si:["මොනිටරය","System Unit","UPS"], correctOrder_si:["UPS","System Unit","මොනිටරය"]},
+
+  {id:30,type:'reorder',
+   q_en:"Put these steps in right order for starting safely.",
+   q_si:"ආරක්ෂිතව ආරම්භ කිරීම සඳහා මෙම පියවරන් නිවැරදි අනුපිළිවෙලට සකසන්න.",
+   items_en:["Check cables","Press power button","Turn on UPS"], correctOrder_en:["Turn on UPS","Check cables","Press power button"],
+   items_si:["කේබල් පරීක්ෂා කරන්න","power බොත්තම  ඔබන්න","UPS ක්‍රියාත්මක කරන්න"], correctOrder_si:["UPS ක්‍රියාත්මක කරන්න","කේබල් පරීක්ෂා කරන්න","power බොත්තම  ඔබන්න"]}
+];
+
+// Accept multiple forms for fill answers: create normalized sets
+function normalize(txt){ return (txt||'').toString().trim().toLowerCase(); }
+
+// State store
+let state = {}; // qid -> {selected/answer/order/... , correct:bool}
+let score = 0;
+
+// Build UI
+const area = document.getElementById('activityArea');
+
+function createQuestionBlock(q){
+  const wrapper = document.createElement('div');
+  wrapper.className = 'q';
+  wrapper.id = 'q'+q.id;
+
+  const title = document.createElement('h3');
+  title.innerHTML = `Q${q.id}. ${q.q_en}`;
+  // bilingual line under same size
+  const langline = document.createElement('div');
+  langline.className = 'langline';
+  langline.innerText = q.q_si;
+  wrapper.appendChild(title);
+  wrapper.appendChild(langline);
+
+  const hint = document.createElement('div');
+  hint.className = 'hint';
+  hint.innerText = (q.type==='mcq'?'Choose one answer. • එක පිළිතුර තෝරන්න.' :
+                    q.type==='tf'?'True or False. • හරි හෝ වැරදිය.' :
+                    q.type==='fill'?'Type the missing word. • අදාළ වචනය ටයිප් කරන්න.' :
+                    q.type==='match'?'Drag the correct answer to each box. • නිවැරදි පිළිතුර ඇද එය කොටුවට දමන්න.' :
+                    q.type==='reorder'?'Drag to reorder items, then click Check. • අයිතම අනුපිළිවෙලට සකස් කිරීමට ඇදෙගෙන යන්න, පසුව පරික්ෂා කරන්න.' : '');
+  wrapper.appendChild(hint);
+
+  const content = document.createElement('div');
+
+  if(q.type==='mcq'){
+    const opts = document.createElement('div'); opts.className='options';
+    q.options.forEach((o,idx)=>{
+      const d = document.createElement('div'); d.className='opt'; d.tabIndex=0;
+      // show English then Sinhala on next line same size
+      d.innerHTML = `<div>${o.en}</div><div class="langline">${o.si}</div>`;
+      d.onclick = ()=> selectMCQ(q.id, idx, d);
+      opts.appendChild(d);
+    });
+    content.appendChild(opts);
+  } else if(q.type==='tf'){
+    const opts = document.createElement('div'); opts.className='options';
+    ['True','False'].forEach((t,idx)=>{
+      const d = document.createElement('div'); d.className='opt'; d.tabIndex=0;
+      const si = (t==='True')? 'හරි' : 'වැරදි';
+      d.innerHTML = `<div>${t}</div><div class="langline">${si}</div>`;
+      d.onclick = ()=> selectTF(q.id, (t==='True'), d);
+      opts.appendChild(d);
+    });
+    content.appendChild(opts);
+  } else if(q.type==='fill'){
+    const inp = document.createElement('input'); inp.className='input'; inp.placeholder='Type your answer • ඔබේ පිළිතුර ටයිප් කරන්න';
+    inp.oninput = ()=> answerFill(q.id, inp.value);
+    content.appendChild(inp);
+    const small = document.createElement('div'); small.className='small'; small.innerText='Accepts English or Sinhala. • ඉංග්‍රීසි හෝ සිංහල පිළිගනී.';
+    content.appendChild(small);
+  } else if(q.type==='match'){
+    const ma = document.createElement('div'); ma.className='match-area';
+    const leftCol = document.createElement('div'); leftCol.className='match-col';
+    q.pairs.forEach((p,idx)=>{
+      const box = document.createElement('div'); box.style.margin='8px 0';
+      const lbl = document.createElement('div'); lbl.className='small'; lbl.innerHTML=`${p.left_en}<div class="langline">${p.left_si}</div>`;
+      const target = document.createElement('div'); target.className='drop-target';
+      target.dataset.left = p.left_en;
+      target.dataset.index = idx;
+      target.ondragover = ev=>ev.preventDefault();
+      target.ondrop = ev=>{
+        ev.preventDefault();
+        const id = ev.dataTransfer.getData('text/plain');
+        const draggedTextEn = document.getElementById(id).dataset.right_en;
+        const draggedTextSi = document.getElementById(id).dataset.right_si;
+        // place clone
+        const node = document.getElementById(id).cloneNode(true);
+        node.style.cursor='default';
+        node.id = id + '_placed_' + (Math.random()*10000|0);
+        node.draggable = false;
+        target.innerHTML = ''; target.appendChild(node);
+        // record (store english for checking)
+        state[q.id] = state[q.id] || {};
+        state[q.id][p.left_en] = draggedTextEn;
+        updateScoreLive();
+      };
+      box.appendChild(lbl); box.appendChild(target); leftCol.appendChild(box);
+    });
+
+    const rightCol = document.createElement('div'); rightCol.className='match-col';
+    // shuffle right words
+    const rights = q.pairs.map(p=>({en:p.right_en, si:p.right_si})).sort(()=>Math.random()-0.5);
+    rights.forEach((r,idx)=>{
+      const d = document.createElement('div'); d.className='drag-item';
+      d.innerHTML = `<div>${r.en}</div><div class="langline">${r.si}</div>`;
+      d.draggable = true; d.id = `q${q.id}_drag_${idx}`;
+      d.dataset.right_en = r.en; d.dataset.right_si = r.si;
+      d.ondragstart = ev => ev.dataTransfer.setData('text/plain', d.id);
+      rightCol.appendChild(d);
+    });
+
+    ma.appendChild(leftCol); ma.appendChild(rightCol); content.appendChild(ma);
+  } else if(q.type==='reorder'){
+    const ul = document.createElement('ul'); ul.className='reorder-list'; ul.id = 'reorder_' + q.id;
+    // use the language-specific list (prefer English display then Sinhala below)
+    const itemsEn = q.items_en ? q.items_en.slice() : (q.items_en = q.items.slice());
+    const itemsSi = q.items_si ? q.items_si : (q.items_si = q.items.slice());
+    // shuffle display order
+    const items = itemsEn.map((it,idx)=>({en:itemsEn[idx], si: itemsSi[idx]})).sort(()=>Math.random()-0.5);
+    items.forEach((it,idx)=>{
+      const li = document.createElement('li'); li.className='reorder-item'; li.draggable = true;
+      li.id = `q${q.id}_item_${idx}`;
+      li.innerHTML = `<div>${it.en}</div><div class="langline">${it.si}</div>`;
+      li.ondragstart = ev => ev.dataTransfer.setData('text/plain', li.id);
+      li.ondragover = ev => ev.preventDefault();
+      li.ondrop = ev => {
+        ev.preventDefault();
+        const srcId = ev.dataTransfer.getData('text/plain');
+        const src = document.getElementById(srcId);
+        const tgt = li;
+        const parent = tgt.parentNode;
+        parent.insertBefore(src, tgt);
+      };
+      ul.appendChild(li);
+    });
+    content.appendChild(ul);
+    const checkBtn = document.createElement('button'); checkBtn.className='btn-link'; checkBtn.style.marginTop='8px';
+    checkBtn.innerText = 'Check order • අනුපිළිවෙල පරීක්ෂා කරන්න';
+    checkBtn.onclick = ()=> checkReorder(q.id);
+    content.appendChild(checkBtn);
+  }
+
+  wrapper.appendChild(content);
+  return wrapper;
+}
+
+// Render all questions
+questions.forEach(q => {
+  area.appendChild(createQuestionBlock(q));
+});
+
+// Interaction handlers and scoring
+function selectMCQ(qid, idx, node){
+  const parent = node.parentNode;
+  Array.from(parent.children).forEach(n=> n.classList.remove('correct','wrong'));
+  const q = questions.find(x=>x.id===qid);
+  // record
+  state[qid] = state[qid] || {};
+  state[qid].selected = idx;
+  if(idx === q.answer){
+    node.classList.add('correct'); state[qid].correct = true;
+  } else {
+    node.classList.add('wrong'); state[qid].correct = false;
+    // show correct node
+    const correctNode = parent.children[q.answer];
+    if(correctNode) correctNode.classList.add('correct');
+  }
+  updateScoreLive();
+}
+
+function selectTF(qid, val, node){
+  const parent = node.parentNode;
+  Array.from(parent.children).forEach(n=> n.classList.remove('correct','wrong'));
+  const q = questions.find(x=>x.id===qid);
+  state[qid] = state[qid] || {};
+  state[qid].selected = val;
+  state[qid].correct = (val === q.answer);
+  if(state[qid].correct) node.classList.add('correct'); else node.classList.add('wrong');
+  updateScoreLive();
+}
+
+function answerFill(qid, text){
+  const q = questions.find(x=>x.id===qid);
+  const clean = normalize(text);
+  let ok = false;
+  if(q.answerEN && clean === normalize(q.answerEN)) ok = true;
+  if(q.answerSI && q.answerSI.some(si => normalize(si) === clean)) ok = true;
+  // for multi-word desktop screen accept either 'desktop screen' or Sinhala forms
+  state[qid] = { answer: text, correct: ok };
+  updateScoreLive();
+}
+
+function checkReorder(qid){
+  const q = questions.find(x=>x.id===qid);
+  const ul = document.getElementById('reorder_'+qid);
+  const items = Array.from(ul.children).map(li => li.innerText.split('\n')[0].trim()); // take english top line
+  // choose correctOrder_en for checking
+  const correct = q.correctOrder_en || q.correctOrder;
+  let ok = true;
+  for(let i=0;i<correct.length;i++){
+    if(items[i].toLowerCase() !== correct[i].toLowerCase()) { ok = false; break; }
+  }
+  state[qid] = { order: items, correct: ok };
+  Array.from(ul.children).forEach(li=>{
+    li.style.border = ok ? `2px solid ${getComputedStyle(document.documentElement).getPropertyValue('--success')}` : `2px solid ${getComputedStyle(document.documentElement).getPropertyValue('--danger')}`;
+  });
+  updateScoreLive();
+}
+
+function updateScoreLive(){
+  let s = 0; let answered = 0;
+  questions.forEach(q=>{
+    const st = state[q.id];
+    if(st){
+      let ok = !!st.correct;
+      if(q.type==='match'){
+        // require all pairs match
+        let all = true;
+        for(const p of q.pairs){
+          if(!st[p.left_en] || st[p.left_en].toLowerCase() !== p.right_en.toLowerCase()){ all=false; break; }
+        }
+        ok = all;
+      }
+      if(ok) s += 1;
+      // Determine answered
+      if(q.type==='mcq' && st.selected !== undefined) answered++;
+      else if(q.type==='tf' && st.selected !== undefined) answered++;
+      else if(q.type==='fill' && st.answer !== undefined && st.answer.toString().trim() !== '') answered++;
+      else if(q.type==='match' && st && Object.keys(st).length>0) answered++;
+      else if(q.type==='reorder' && st && st.order) answered++;
+    }
+  });
+  score = s;
+  document.getElementById('score').innerText = `${score} / ${questions.length}`;
+  document.getElementById('answered').innerText = `${answered} / ${questions.length}`;
+  const fb = document.getElementById('liveFeedback');
+  if(score === questions.length) fb.innerHTML = 'Amazing! Full marks! 🎉 • විශිෂ්ටයි! සම්පූර්ණ ලකුණු!';
+  else if(score > questions.length * 0.7) fb.innerHTML = 'Great job — almost there! • සුබපැතුම් — ඉදිරියෙන් ඇත!';
+  else fb.innerHTML = 'Keep going — little steps! • ඉදිරියට යන්න — තව  අදියර කිහිපයක්.';
+}
+
+// Matching drop handler: we already saved the dragged text as english into state during drop
+
+// Save results as JSON
+function saveResults(){
+  const name = document.getElementById('name').value || 'Unnamed';
+  const grade = document.getElementById('grade').value || '';
+  const out = { name, grade, date: (new Date()).toISOString(), score, total: questions.length, answers: state };
+  const blob = new Blob([JSON.stringify(out,null,2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url;
+  a.download = `${name.replace(/\s+/g,'_')}_power_on_result.json`;
+  document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+}
+
+// Reset page answers
+function resetAll(){
+  if(!confirm('Reset all answers? • සියලු පිළිතුරු නැවත සකස් කරන්නද?')) return;
+  state = {}; score = 0;
+  // clear UI selections
+  document.querySelectorAll('.opt').forEach(n => n.classList.remove('correct','wrong'));
+  document.querySelectorAll('.drop-target').forEach(t => t.innerHTML = '');
+  // reload reorder items by re-rendering the page for simplicity
+  area.innerHTML = '';
+  questions.forEach(q => area.appendChild(createQuestionBlock(q)));
+  updateScoreLive();
+}
+
+// Print summary in new window
+function printResults(){
+  const name = document.getElementById('name').value || 'Unnamed';
+  const grade = document.getElementById('grade').value || '';
+  const newWin = window.open('', '_blank');
+  const html = `
+    <html><head><title>Results for ${name}</title>
+    <style>body{font-family:Arial;padding:18px} .correct{color:green;font-weight:700}</style></head><body>
+    <h2>Results for ${name} • ${grade}</h2>
+    <p>Score: ${score} / ${questions.length}</p>
+    <h3>Answers Summary • පිළිතුරු සාරාංශය</h3>
+    <ol>
+      ${questions.map(q=>{
+        const st = state[q.id];
+        const ansStatus = st ? (st.correct ? 'Correct • නිවැරදි' : 'Not correct • නිවැරදි නැත') : 'No answer • පිළිතුරක් නැත';
+        return `<li><strong>Q${q.id}</strong> ${q.q_en} <div style="color:#0b3b63">${q.q_si}</div> — <em>${ansStatus}</em></li>`;
+      }).join('')}
+    </ol>
+    </body></html>`;
+  newWin.document.write(html); newWin.document.close(); newWin.print();
+}
+
+// Wire buttons
+document.getElementById('saveBtn').onclick = saveResults;
+document.getElementById('printBtn').onclick = printResults;
+document.getElementById('resetBtn').onclick = resetAll;
+
+// Initial score update
+updateScoreLive();
+
+/* Accessibility: allow enter key to select options */
+document.addEventListener('keydown', e=>{
+  if(e.key === 'Enter' && document.activeElement && document.activeElement.classList.contains('opt')){
+    document.activeElement.click();
+  }
+});
+
+// ===== ADDED: Per-question Reset buttons and Submit All (shows correct answers) =====
+(function addResetAndSubmitAll(){
+  // run after a short delay to ensure dynamic rendering complete
+  function setup(){
+    // Add reset button to each question block
+    document.querySelectorAll('.q').forEach(qBlock => {
+      // Avoid duplicating buttons if rerun
+      if (qBlock.dataset.resetAdded) return;
+      qBlock.dataset.resetAdded = '1';
+      const resetBtn = document.createElement('button');
+      resetBtn.className = 'btn-link secondary';
+      resetBtn.type = 'button';
+      resetBtn.style.marginTop = '8px';
+      resetBtn.innerText = '🔄 Reset this quiz • මෙම ප්‍රශ්නය නැවත සකසන්න';
+      resetBtn.onclick = () => {
+        const qid = parseInt(qBlock.id.replace('q',''));
+        if (!qid) return;
+        // Clear state for that question
+        if (state && state[qid]) delete state[qid];
+        // Remove classes and inputs
+        qBlock.querySelectorAll('.opt').forEach(o=>{
+          o.classList.remove('correct','wrong');
+        });
+        qBlock.querySelectorAll('input').forEach(i=> i.value = '');
+        qBlock.querySelectorAll('.drop-target').forEach(t => t.innerHTML = '');
+        // For reorder: re-render the question block to reset draggable list
+        const q = questions.find(x => x.id === qid);
+        if (q && q.type === 'reorder') {
+          const newBlock = createQuestionBlock(q);
+          qBlock.replaceWith(newBlock);
+        }
+        updateScoreLive();
+        // re-add per-question button on the new block if replaced
+        setTimeout(setup, 50);
+      };
+      qBlock.appendChild(resetBtn);
+    });
+
+    // Add Submit All button once near the activity area bottom
+    if (!document.getElementById('submitAllBtn')) {
+      const submitAll = document.createElement('button');
+      submitAll.id = 'submitAllBtn';
+      submitAll.className = 'btn-link';
+      submitAll.type = 'button';
+      submitAll.style.margin = '18px 0';
+      submitAll.innerText = '✅ Submit All • සියලුම පිළිතුරු පෙන්වන්න';
+      submitAll.onclick = () => {
+        // Reveal correct answers for all question types
+        questions.forEach(q => {
+          const qBlock = document.getElementById('q' + q.id);
+          if (!qBlock) return;
+          if (q.type === 'mcq') {
+            const opts = qBlock.querySelectorAll('.opt');
+            if (opts && opts[q.answer]) opts[q.answer].classList.add('correct');
+          } else if (q.type === 'tf') {
+            const opts = qBlock.querySelectorAll('.opt');
+            opts.forEach(opt=>{
+              const text = opt.innerText || opt.textContent || '';
+              const isTrue = text.toLowerCase().includes('true') || text.includes('හරි');
+              if (isTrue === !!q.answer) opt.classList.add('correct');
+            });
+          } else if (q.type === 'fill') {
+            const inp = qBlock.querySelector('input');
+            if (inp) {
+              const ans = q.answerEN || (q.answerSI ? q.answerSI[0] : '');
+              inp.placeholder = '✅ Correct: ' + ans;
+              inp.style.borderColor = getComputedStyle(document.documentElement).getPropertyValue('--success') || 'green';
+            }
+          } else if (q.type === 'match') {
+            // Fill each drop-target with the correct right_en/right_si
+            const targets = qBlock.querySelectorAll('.drop-target');
+            targets.forEach(t=>{
+              const left = t.dataset.left;
+              const pair = q.pairs.find(p => p.left_en === left);
+              if (pair) {
+                t.innerHTML = `<div class="small">${pair.right_en}<div class="langline">${pair.right_si}</div></div>`;
+                t.style.borderColor = getComputedStyle(document.documentElement).getPropertyValue('--success') || 'green';
+              }
+            });
+          } else if (q.type === 'reorder') {
+            const ul = qBlock.querySelector('.reorder-list');
+            if (ul && q.correctOrder_en) {
+              ul.innerHTML = q.correctOrder_en.map((en, idx) => {
+                const si = (q.correctOrder_si && q.correctOrder_si[idx]) ? q.correctOrder_si[idx] : en;
+                return `<li class="reorder-item" style="border:2px solid var(--success)"><div>${en}</div><div class="langline">${si}</div></li>`;
+              }).join('');
+            }
+          }
+        });
+        // update score view to reflect revealed correct answers
+        // mark all state as correct for scoring display
+        questions.forEach(q => { state[q.id] = state[q.id] || {}; state[q.id].correct = true; });
+        updateScoreLive();
+        alert('All correct answers are now shown. • සියලු නිවැරදි පිළිතුරු දැක්වෙයි.');
+      };
+      // Append submitAll after activity area
+      const activityArea = document.getElementById('activityArea');
+      if (activityArea) activityArea.appendChild(submitAll);
+      else document.body.appendChild(submitAll);
+    }
+  }
+
+  // Wait until DOM appears rendered (questions created)
+  if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    // small timeout to allow dynamic rendering
+    setTimeout(setup, 120);
+  } else {
+    window.addEventListener('DOMContentLoaded', () => setTimeout(setup, 120));
+  }
+})();
+</script>
+
+</body>
+</html>
+
